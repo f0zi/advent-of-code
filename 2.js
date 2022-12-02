@@ -2,35 +2,40 @@ function sum(array) {
 	return array.reduce((sum, n) => sum + n, 0)
 }
 
-const Rock = { name: "Rock", score: 1, Scissors: true, Paper: false }
-const Paper = { name: "Paper", score: 2, Rock: true, Scissors: false }
-const Scissors = { name: "Scissors", score: 3, Paper: true, Rock: false }
-
-for(var x of [Rock, Paper, Scissors]) {
-	for(var y of [Rock, Paper, Scissors]) {
-		if(x == y) x.draw = y;
-		else if(x[y.name]) x.win = y;
-		else x.lose = y;
+const part1 = {
+	A: { // Rock
+		X: 3+1, // Rock: draw + 1
+		Y: 6+2, // Paper: win + 2
+		Z: 0+3, // Scissors: lose + 3
+	},
+	B: { // Paper
+		X: 0+1, // Rock: lose + 1
+		Y: 3+2, // Paper: draw + 2
+		Z: 6+3, // Scissors: win + 3
+	},
+	C: { // Scissors
+		X: 6+1, // Rock: win + 1
+		Y: 0+2, // Paper: lose + 2
+		Z: 3+3, // Scissors: draw + 3
 	}
 }
 
-const Names = {
-	Rock, Paper, Scissors,
-	A: Rock, X: Rock,
-	B: Paper, Y: Paper,
-	C: Scissors, Z: Scissors,
-}
-
-const Goals = {
-	X: 'win', Y: 'draw', Z: 'lose'
-}
-
-function score(other, mine) {
-	other = Names[other]
-	mine = Names[mine]
-	const draw = mine == other
-	const win = !draw && mine[other.name]
-	return (draw ? 3 : (win ? 6 : 0)) + mine.score
+const part2 = {
+	A: { // Rock
+		X: 0+3, // lose: Scissors (3)
+		Y: 3+1, // draw: Rock (1)
+		Z: 6+2, // win: Paper (2)
+	},
+	B: { // Paper
+		X: 0+1, // lose: Rock (1)
+		Y: 3+2, // draw: Paper (2)
+		Z: 6+3, // win: Scissors (3)
+	},
+	C: { // Scissors
+		X: 0+2, // lose: Paper (2)
+		Y: 3+3, // draw: Scissors (3)
+		Z: 6+1, // win: Rock (1)
+	}
 }
 
 function Guide(input) {
@@ -39,18 +44,13 @@ function Guide(input) {
 
 function RockPaperScissors1(input) {
 	const guide = Guide(input)
-	const scores = guide.map(round => score(...round))
+	const scores = guide.map(round => part1[round[0]][round[1]])
 	return sum(scores);
 }
 
 function RockPaperScissors2(input) {
 	const guide = Guide(input)
-	const scores = guide.map(round => {
-		var [ other, mine ] = round;
-		other = Names[other];
-		mine = other[Goals[mine]];
-		return score(other.name, mine.name)
-	})
+	const scores = guide.map(round => part2[round[0]][round[1]])
 	return sum(scores)
 }
 
