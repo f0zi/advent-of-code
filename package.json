@@ -1,0 +1,15 @@
+{
+	"name": "advent.of.code.22",
+	"version": "1.0.0",
+	"author": "Fozi<aoc@fozi.ca>",
+	"license": "MIT",
+	"scripts": {
+		"test": "mocha",
+		"coverage": "nyc npm test"
+	},
+	"devDependencies": {
+		"nyc": "^15.1.0",
+		"mocha": "^10.1.0",
+		"chai": "^4.3.7"
+	}
+}
