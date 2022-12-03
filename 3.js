@@ -2,18 +2,30 @@ function sum(array) {
 	return array.reduce((sum, n) => sum + n, 0)
 }
 
-function intersection(A, B) {
+function intersection(...sets) {
 	const result = []
-	for(var ia = 0, ib = 0; ia < A.length && ib < B.length;) {
-		if(A[ia] == B[ib]) {
-			var element = A[ia]
-			result.push(element)
-			do { ++ia } while(A[ia]==element)
-			do { ++ib } while(B[ib]==element)
+	for(const i = sets.map(() => 0) ; i.every((i, set) => i < sets[set].length);) {
+		const best = i.reduce((best, i, set) => {
+			if(best.item && sets[set][i] == best.item) {
+				best.sets.push(set)
+			} else if(!best.item || sets[set][i] < best.item) {
+				best = {
+					item: sets[set][i],
+					sets: [ set ]
+				}
+			}
+			return best
+		}, {})
+
+		if(best.sets.length == sets.length) {
+			result.push(best.item)
 		}
-		else if(A[ia] < B[ib]) ++ia
-		else ++ib
+
+		best.sets.forEach(set => {
+			do { ++i[set] } while(sets[set][i[set]] == best.item)
+		})
 	}
+
 	return result;
 }
 
@@ -43,7 +55,7 @@ function RucksackReorganization2(input) {
 		else groups.push([ item ])
 		return groups
 	}, [])
-	const intersected = groups.map(([a,b,c]) => intersection(intersection(a,b),c).join(''))
+	const intersected = groups.map(group => intersection(...group).join(''))
 	const priorities = intersected.map(priority)
 	return sum(priorities)
 }
